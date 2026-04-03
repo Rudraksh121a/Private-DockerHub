@@ -1,18 +1,18 @@
-# 🚀 Private Docker Registry with Azure Blob Storage + Nginx + SSL
+# Private Docker Registry with Azure Blob Storage + Nginx + SSL
 
-## 📌 Overview
+## Overview
 
-This project demonstrates how to set up a **self-hosted private Docker image registry** using:
+This project demonstrates how to set up a self-hosted private Docker image registry using:
 
 * Docker Registry (`registry:2`)
 * Nginx (reverse proxy)
 * SSL (Let's Encrypt)
 * Authentication (htpasswd)
-* Azure Blob Storage (as backend storage)
+* Azure Blob Storage (backend storage)
 
 ---
 
-## 🧱 Architecture
+## Architecture
 
 ```
 Docker Client → Nginx (HTTPS) → Docker Registry → Azure Blob Storage
@@ -20,16 +20,32 @@ Docker Client → Nginx (HTTPS) → Docker Registry → Azure Blob Storage
 
 ---
 
-## ⚙️ Prerequisites
+## Screenshots
+
+### Registry Working (`/v2/` response)
+
+![Registry Output](./image-1.png)
+
+### Docker Push Process
+
+![Docker Push](./image2.png)
+
+### Storage
+
+![Setup](./image-3.png)
+
+---
+
+## Prerequisites
 
 * Linux server (Ubuntu recommended)
 * Domain name (e.g., `hub.yourdomain.com`)
 * Docker & Docker Compose installed
-* Azure account (for Blob Storage)
+* Azure account
 
 ---
 
-## 🐳 Step 1: Install Docker
+## Step 1: Install Docker
 
 ```bash
 sudo apt-get update
@@ -50,18 +66,18 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 ---
 
-## ☁️ Step 2: Azure Blob Storage Setup
+## Step 2: Azure Blob Storage Setup
 
-1. Create **Storage Account**
-2. Create **Container** (e.g., `registry`)
+1. Create Storage Account
+2. Create Blob Container (e.g., `registry`)
 3. Copy:
 
-   * `accountname`
-   * `accountkey`
+   * accountname
+   * accountkey
 
 ---
 
-## 📁 Step 3: Project Setup
+## Step 3: Project Setup
 
 ```bash
 mkdir ~/docker-registry
@@ -71,7 +87,7 @@ mkdir auth
 
 ---
 
-## 🔧 Step 4: Create `config.yml`
+## Step 4: Create config.yml
 
 ```yaml
 version: 0.1
@@ -88,7 +104,7 @@ http:
 
 ---
 
-## 🔐 Step 5: Setup Authentication
+## Step 5: Setup Authentication
 
 ```bash
 sudo apt install apache2-utils -y
@@ -97,7 +113,7 @@ htpasswd -Bc auth/registry.password <username>
 
 ---
 
-## 🐳 Step 6: Create `docker-compose.yml`
+## Step 6: Create docker-compose.yml
 
 ```yaml
 version: '3'
@@ -118,16 +134,10 @@ services:
 
 ---
 
-## 🌐 Step 7: Nginx Setup
+## Step 7: Nginx Setup
 
 ```bash
 sudo apt install nginx
-```
-
-Edit config:
-
-```bash
-sudo vim /etc/nginx/sites-available/registry
 ```
 
 ```nginx
@@ -148,7 +158,7 @@ server {
 }
 ```
 
-Enable:
+Enable config:
 
 ```bash
 sudo ln -s /etc/nginx/sites-available/registry /etc/nginx/sites-enabled/
@@ -158,7 +168,7 @@ sudo systemctl reload nginx
 
 ---
 
-## 🔒 Step 8: Enable SSL
+## Step 8: Enable SSL
 
 ```bash
 sudo apt install certbot python3-certbot-nginx -y
@@ -167,7 +177,7 @@ sudo certbot --nginx
 
 ---
 
-## 📦 Step 9: Run Registry
+## Step 9: Run Registry
 
 ```bash
 docker compose up -d
@@ -187,7 +197,7 @@ Expected:
 
 ---
 
-## 📤 Step 10: Push Image
+## Step 10: Push Image
 
 ```bash
 docker login hub.yourdomain.com
@@ -197,9 +207,15 @@ docker push hub.yourdomain.com/myimage
 ```
 
 
-## 🙌 Author
+## Outcome
 
-**Rudraksh**
-
+* Private Docker registry
+* HTTPS secured
+* Authentication enabled
+* Azure-backed storage
 
 ---
+
+## Author
+
+Rudraksh
